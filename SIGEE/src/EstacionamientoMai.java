@@ -1,4 +1,4 @@
-public class EstacionamientoMain {
+public class EstacionamientoMai {
     public static void main(String[] args) throws Exception {
         SensorOcupacion sensor = new SensorOcupacion();
 
