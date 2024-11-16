@@ -11,5 +11,8 @@ Posibles clases a usar:
 -ModuloAdministracion
 -EstacionamientoMain
 
-
+Parte por hacer de cada integrante:
 -AplicacionMovil - andrey
+-SensorOcupacion/-Sensor - Cesar
+-SeñalizacionVisual  - Lenix
+-ModuloAdministracion - Lucero
