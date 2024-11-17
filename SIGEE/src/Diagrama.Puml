@@ -1,0 +1,59 @@
+@startuml
+
+interface Sensor {
+    +void detectarOcupacion()
+    +void detectarLibreracion()
+}
+
+abstract class Estacionamiento {
+    - String idEspacio
+    - boolean ocupado
+    + Estacionamiento(String idEspacio)
+    + abstract void ocuparEspacio()
+    + abstract void liberarEspacio()
+    + boolean isOcupado()
+}
+
+class EspacioMoto extends Estacionamiento {
+    + EspacioMoto(String idEspacio)
+    + void ocuparEspacio()
+    + void liberarEspacio()
+}
+
+class SensorOcupacion implements Sensor {
+    + void detectarOcupacion()
+    + void detectarLibreracion()
+}
+
+class AplicacionMovil {
+    + void asignarEspacio(Estacionamiento espacio)
+}
+
+class SeñalizacionVisual {
+    + void mostrarEstado(Estacionamiento espacio)
+}
+
+class ModuloAdministracion {
+    - int espaciosTotales
+    - int espaciosOcupados
+    + ModuloAdministracion(int espaciosTotales)
+    + void incrementarEspaciosOcupados()
+    + void decrementarEspaciosOcupados()
+    + void generarReporte()
+}
+
+class EstacionamientoMain {
+    + void main(String[] args) throws Exception
+}
+
+Estacionamiento <|-- EspacioMoto
+Sensor <|.. SensorOcupacion
+EstacionamientoMain ..> AplicacionMovil : "crea y usa"
+EstacionamientoMain ..> EspacioMoto : "crea y usa"
+EstacionamientoMain ..> SensorOcupacion : "crea y usa"
+EstacionamientoMain ..> SeñalizacionVisual : "crea y usa"
+EstacionamientoMain ..> ModuloAdministracion : "crea y usa"
+AplicacionMovil ..> Estacionamiento : "usa"
+SeñalizacionVisual ..> Estacionamiento : "usa"
+
+@enduml
