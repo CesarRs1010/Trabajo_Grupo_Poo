@@ -12,9 +12,13 @@ public class SeñalizacionVisual {
 
     public void mostrarDetalleEstado(Estacionamiento espacio) {
         if (espacio.isOcupado()) {
-            System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio() + " está ocupado. Luz Roja encendida. Tiempo de ocupación estimado: " + obtenerTiempoOcupacion(espacio) + " minutos.");
+            System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio()
+                    + " está ocupado. Luz Roja encendida. Tiempo de ocupación estimado: "
+                    + obtenerTiempoOcupacion(espacio) + " minutos.");
         } else {
-            System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio() + " está disponible. Luz Verde encendida. Última liberación hace: " + AplicacionMovil.obtenerTiempoDesdeUltimaLiberacion(espacio) + " minutos.");
+            System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio()
+                    + " está disponible. Luz Verde encendida. Última liberación hace: "
+                    + AplicacionMovil.obtenerTiempoDesdeUltimaLiberacion(espacio) + " minutos.");
         }
     }
 
@@ -26,10 +30,11 @@ public class SeñalizacionVisual {
 
     public void mostrarEspaciosDisponibles(List<Estacionamiento> espacios) {
         List<Estacionamiento> espaciosLibres = espacios.stream()
-            .filter(espacio -> !espacio.isOcupado())
-            .collect(Collectors.toList());
+                .filter(espacio -> !espacio.isOcupado())
+                .collect(Collectors.toList());
 
         System.out.println("Espacios disponibles:");
-        espaciosLibres.forEach(espacio -> System.out.println("Espacio " + espacio.getIdEspacio() + " está disponible."));
+        espaciosLibres
+                .forEach(espacio -> System.out.println("Espacio " + espacio.getIdEspacio() + " está disponible."));
     }
 }
