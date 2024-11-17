@@ -14,7 +14,7 @@ public class SeñalizacionVisual {
         if (espacio.isOcupado()) {
             System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio() + " está ocupado. Luz Roja encendida. Tiempo de ocupación estimado: " + obtenerTiempoOcupacion(espacio) + " minutos.");
         } else {
-            System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio() + " está disponible. Luz Verde encendida. Última liberación hace: " + obtenerTiempoDesdeUltimaLiberacion(espacio) + " minutos.");
+            System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio() + " está disponible. Luz Verde encendida. Última liberación hace: " + AplicacionMovil.obtenerTiempoDesdeUltimaLiberacion(espacio) + " minutos.");
         }
     }
 
@@ -24,19 +24,6 @@ public class SeñalizacionVisual {
         return 15; // Retorna un valor de ejemplo.
     }
 
-    private int obtenerTiempoDesdeUltimaLiberacion(Estacionamiento espacio) {
-        System.out.println("Calculando el tiempo desde la última liberación para el espacio: " + espacio.getIdEspacio());
-        // Simulación del cálculo del tiempo desde la última liberación.
-        return 10; // Retorna un valor de ejemplo.
-    }
-
-    public void mostrarEstadisticas(Estacionamiento espacio, ModuloAdministracion admin) {
-        System.out.println("[ESTADÍSTICAS] Estado del estacionamiento:");
-        mostrarDetalleEstado(espacio);
-        admin.generarReporte();
-    }
-
-    // Nuevo método utilizando Streams y Lambdas
     public void mostrarEspaciosDisponibles(List<Estacionamiento> espacios) {
         List<Estacionamiento> espaciosLibres = espacios.stream()
             .filter(espacio -> !espacio.isOcupado())

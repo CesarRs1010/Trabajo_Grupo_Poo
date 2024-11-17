@@ -9,20 +9,18 @@ public class EstacionamientoMai {
         // Probar la asignacion de espacio
         sensor.detectarOcupacion();
         app.asignarEspacio(espacio1);
+        admin.incrementarEspaciosOcupados();  // Incrementar espacios ocupados después de asignar
         señal.mostrarEstado(espacio1);
-        señal.mostrarDetalleEstado(espacio1); // Mostrar detalles adicionales del estado del espacio
+        señal.mostrarDetalleEstado(espacio1);
 
         // Parte para la liberacion de espacio
         sensor.detectarLibreracion();
         espacio1.liberarEspacio();
+        admin.decrementarEspaciosOcupados();  // Decrementar espacios ocupados después de liberar
         señal.mostrarEstado(espacio1);
-        señal.mostrarDetalleEstado(espacio1); // Mostrar detalles adicionales del estado del espacio
+        señal.mostrarDetalleEstado(espacio1);
 
-        // Parte en la que se va a generar un reporte
-        admin.incrementarEspaciosOcupados();
-        admin.generarReporte();
-
-        // Mostrar estadísticas completas al final
-        señal.mostrarEstadisticas(espacio1, admin);
+        // Parte en la que se va a generar un reporte desde AplicacionMovil
+        app.mostrarReporteAplicacionMovil(espacio1, admin);
     }
 }
