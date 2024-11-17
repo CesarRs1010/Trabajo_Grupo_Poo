@@ -1,5 +1,5 @@
 public abstract class Estacionamiento {
-    protected String idEspacio;
+    private String idEspacio;  // Cambiado de protected a private
     protected boolean ocupado;
 
     public Estacionamiento(String idEspacio) {
@@ -13,5 +13,10 @@ public abstract class Estacionamiento {
 
     public boolean isOcupado() {
         return ocupado;
+    }
+
+    // Getter para idEspacio
+    public String getIdEspacio() {
+        return idEspacio;
     }
 }
