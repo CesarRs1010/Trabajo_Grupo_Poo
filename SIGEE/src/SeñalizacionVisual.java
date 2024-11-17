@@ -19,11 +19,13 @@ public class SeñalizacionVisual {
     }
 
     private int obtenerTiempoOcupacion(Estacionamiento espacio) {
+        System.out.println("Calculando el tiempo de ocupación para el espacio: " + espacio.getIdEspacio());
         // Simulación del cálculo del tiempo de ocupación.
         return 15; // Retorna un valor de ejemplo.
     }
 
     private int obtenerTiempoDesdeUltimaLiberacion(Estacionamiento espacio) {
+        System.out.println("Calculando el tiempo desde la última liberación para el espacio: " + espacio.getIdEspacio());
         // Simulación del cálculo del tiempo desde la última liberación.
         return 10; // Retorna un valor de ejemplo.
     }

@@ -7,9 +7,9 @@ public class EspacioMoto extends Estacionamiento {
     public void ocuparEspacio() {
         if (!ocupado) {
             ocupado = true;
-            System.out.println("Espacio " + idEspacio + " ha sido ocupado por una moto.");
+            System.out.println("Espacio " + getIdEspacio() + " ha sido ocupado por una moto.");
         } else {
-            System.out.println("Espacio " + idEspacio + " ya está ocupado.");
+            System.out.println("Espacio " + getIdEspacio() + " ya está ocupado.");
         }
     }
 
@@ -17,9 +17,9 @@ public class EspacioMoto extends Estacionamiento {
     public void liberarEspacio() {
         if (ocupado) {
             ocupado = false;
-            System.out.println("Espacio " + idEspacio + " ha sido liberado.");
+            System.out.println("Espacio " + getIdEspacio() + " ha sido liberado.");
         } else {
-            System.out.println("Espacio " + idEspacio + " ya está libre.");
+            System.out.println("Espacio " + getIdEspacio() + " ya está libre.");
         }
     }
 }

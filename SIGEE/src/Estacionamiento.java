@@ -1,5 +1,5 @@
 public abstract class Estacionamiento {
-    private String idEspacio;  // Cambiado de protected a private
+    private final String idEspacio;  // Cambiado de protected a private
     protected boolean ocupado;
 
     public Estacionamiento(String idEspacio) {
