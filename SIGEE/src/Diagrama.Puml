@@ -1,4 +1,4 @@
-@startuml
+@startuml Diagrama
 
 interface Sensor {
     +void detectarOcupacion()
@@ -12,6 +12,7 @@ abstract class Estacionamiento {
     + abstract void ocuparEspacio()
     + abstract void liberarEspacio()
     + boolean isOcupado()
+    + String getIdEspacio()
 }
 
 class EspacioMoto extends Estacionamiento {
@@ -27,10 +28,14 @@ class SensorOcupacion implements Sensor {
 
 class AplicacionMovil {
     + void asignarEspacio(Estacionamiento espacio)
+    + static int obtenerTiempoDesdeUltimaLiberacion(Estacionamiento espacio)
+    + void mostrarReporteAplicacionMovil(Estacionamiento espacio, ModuloAdministracion admin)
 }
 
 class SeñalizacionVisual {
     + void mostrarEstado(Estacionamiento espacio)
+    + void mostrarDetalleEstado(Estacionamiento espacio)
+    + void mostrarEspaciosDisponibles(List<Estacionamiento> espacios)
 }
 
 class ModuloAdministracion {
@@ -54,6 +59,8 @@ EstacionamientoMain ..> SensorOcupacion : "crea y usa"
 EstacionamientoMain ..> SeñalizacionVisual : "crea y usa"
 EstacionamientoMain ..> ModuloAdministracion : "crea y usa"
 AplicacionMovil ..> Estacionamiento : "usa"
+AplicacionMovil ..> ModuloAdministracion : "usa"
 SeñalizacionVisual ..> Estacionamiento : "usa"
+SeñalizacionVisual ..> List : "usa"
 
 @enduml
