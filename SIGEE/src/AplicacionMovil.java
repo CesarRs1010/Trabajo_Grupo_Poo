@@ -1,9 +1,13 @@
-import java.util.List;
 import java.util.Scanner;
 
 public class AplicacionMovil {
     private final Scanner scanner = new Scanner(System.in);
     private final SensorOcupacion sensor = new SensorOcupacion();
+
+    public void iniciarAplicacion(DatosSimulacion datosSimulacion) {
+        System.out.println("\n******************* Bienvenidos a la cochera UTP *******************");
+        mostrarMenuOpciones(datosSimulacion);
+    }    
 
     // Agregado método para mostrar menú
     public void mostrarMenuOpciones(DatosSimulacion datosSimulacion) {
