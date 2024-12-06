@@ -7,7 +7,7 @@ public class AplicacionMovil {
     public void iniciarAplicacion(DatosSimulacion datosSimulacion) {
         System.out.println("\n******************* Bienvenidos a la cochera UTP *******************");
         mostrarMenuOpciones(datosSimulacion);
-    }    
+    }
 
     // Agregado método para mostrar menú
     public void mostrarMenuOpciones(DatosSimulacion datosSimulacion) {
@@ -26,6 +26,21 @@ public class AplicacionMovil {
 
     private void ejecutarOpciones(DatosSimulacion datosSimulacion) {
         // Código para manejar las opciones seleccionadas por el usuario
+        
+        if (salirApp == 1) {
+            System.out.println("\n********************  ¿Desea salir de la simulación? ********************");
+            System.out.println("1) Sí\n2) No\n3) Iniciar otra simulación\n4) Limpiar datos de simulación");
+            int salirSimulacion = obtenerEntradaInt();
+            switch (salirSimulacion) {
+                case 4:
+                    System.out.println("Limpiando datos de simulación...");
+                    datosSimulacion.limpiarDatos();
+                    iniciarAplicacion(datosSimulacion);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private int obtenerEntradaInt() {
