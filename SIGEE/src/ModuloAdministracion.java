@@ -1,3 +1,4 @@
+
 public class ModuloAdministracion {
     private final int espaciosTotales;
     private int espaciosOcupados;
@@ -22,6 +23,14 @@ public class ModuloAdministracion {
     public void generarReporte() {
         System.out.println("Total de espacios: " + espaciosTotales);
         System.out.println("Espacios ocupados: " + espaciosOcupados);
-        System.out.println("Espacios libres: " + (espaciosTotales - espaciosOcupados));
+        System.out.println("Espacios libres: " + getEspaciosLibres());
+    }
+
+    public int getEspaciosLibres() {
+        return espaciosTotales - espaciosOcupados;
+    }
+
+    public void resetearEspacios() {
+        this.espaciosOcupados = 0; // Reiniciar la cantidad de espacios ocupados a cero
     }
 }
