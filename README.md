@@ -16,3 +16,7 @@ Parte por hacer de cada integrante:
 -SensorOcupacion/-Sensor - Cesar
 -SeñalizacionVisual  - Lenix
 -ModuloAdministracion - Lucero
+
+-Para este trabajo unicamente hubo aporte de:
+-Rimarachin Paico César
+-Alexis junior belito sotacuro
