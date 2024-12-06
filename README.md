@@ -18,5 +18,7 @@ Parte por hacer de cada integrante:
 -ModuloAdministracion - Lucero
 
 -Para este trabajo unicamente hubo aporte de:
+
 -Rimarachin Paico César
+
 -Alexis junior belito sotacuro
