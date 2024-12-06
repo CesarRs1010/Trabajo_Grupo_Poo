@@ -1,22 +1,37 @@
+import java.util.List;
+import java.util.Scanner;
+
 public class AplicacionMovil {
-    public void asignarEspacio(Estacionamiento espacio) {
-        if (!espacio.isOcupado()) {
-            espacio.ocuparEspacio();
-            System.out.println("Espacio " + espacio.getIdEspacio() + " asignado correctamente.");
-        } else {
-            System.out.println("Espacio " + espacio.getIdEspacio() + " ya está ocupado, selecciona otro.");
+    private final Scanner scanner = new Scanner(System.in);
+    private final SensorOcupacion sensor = new SensorOcupacion();
+
+    // Agregado método para mostrar menú
+    public void mostrarMenuOpciones(DatosSimulacion datosSimulacion) {
+        int ingresar;
+        do {
+            System.out.println("\nIngresar a la aplicación:\n1) Ingresar\n2) Salir");
+            ingresar = obtenerEntradaInt();
+
+            if (ingresar == 1) {
+                ejecutarOpciones(datosSimulacion);
+            } else if (ingresar != 2) {
+                System.out.println("Opción no válida. Intente de nuevo.");
+            }
+        } while (ingresar != 2);
+    }
+
+    private void ejecutarOpciones(DatosSimulacion datosSimulacion) {
+        // Código para manejar las opciones seleccionadas por el usuario
+    }
+
+    private int obtenerEntradaInt() {
+        while (true) {
+            try {
+                return scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Entrada inválida. Por favor, ingresa un número.");
+                scanner.next(); // Consumir la entrada no válida
+            }
         }
-    }
-
-    public static int obtenerTiempoDesdeUltimaLiberacion(Estacionamiento espacio) {
-        System.out.println("Calculando el tiempo desde la última liberación para el espacio: " + espacio.getIdEspacio());
-        // Simulación del cálculo del tiempo desde la última liberación.
-        return 10; // Retorna un valor de ejemplo.
-    }
-
-    public void mostrarReporteAplicacionMovil(Estacionamiento espacio, ModuloAdministracion admin) {
-        System.out.println("[REPORTE DE APLICACIÓN MÓVIL] Estado del estacionamiento:");
-        System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio() + " está disponible. Última liberación hace: " + obtenerTiempoDesdeUltimaLiberacion(espacio) + " minutos.");
-        admin.generarReporte();
     }
 }
