@@ -30,3 +30,4 @@ public class DatosSimulacion {
         admin.resetearEspacios();
     }
 }
+
