@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class AplicacionMovil {
@@ -42,6 +43,21 @@ public class AplicacionMovil {
             }
         }
     }
+
+
+    public void asignarEspacio(List<Estacionamiento> espacios, String placa, ModuloAdministracion admin) {
+    for (Estacionamiento espacio : espacios) {
+        if (!espacio.isOcupado()) {
+            espacio.ocuparEspacio();
+            System.out.println("Espacio " + espacio.getIdEspacio() + " ha sido asignado a la moto con placa: " + placa);
+            admin.incrementarEspaciosOcupados();
+            sensor.detectarOcupacion();
+            return;
+        }
+    }
+    System.out.println("No hay espacios disponibles.");
+    }
+    
 
     private int obtenerEntradaInt() {
         while (true) {
