@@ -10,7 +10,16 @@ public class AplicacionMovil {
         mostrarMenuOpciones(datosSimulacion);
     }
 
-    // Agregado método para mostrar menú
+    public String registrarMoto() {
+        System.out.print("Número de placa: ");
+        String placa = scanner.nextLine();
+        while (placa.isEmpty()) {
+            System.out.println("La placa no puede estar vacía. Por favor, ingresa un número de placa válido:");
+            placa = scanner.nextLine();
+        }
+        return placa;
+    }
+
     public void mostrarMenuOpciones(DatosSimulacion datosSimulacion) {
         int ingresar;
         do {
@@ -26,45 +35,75 @@ public class AplicacionMovil {
     }
 
     private void ejecutarOpciones(DatosSimulacion datosSimulacion) {
-        System.out.println("\nElija una opción:\n1) Asignar Espacio\n2) Liberar Espacio\n3) Generar Reporte");
-        int opcion = obtenerEntradaInt();
-    
-        switch (opcion) {
-            case 1:
-                System.out.print("Ingrese el número de placa de la moto: ");
-                String placa = scanner.next();
-                asignarEspacio(datosSimulacion.getEspacios(), placa, datosSimulacion.getAdmin());
-                break;
-            case 2:
-                System.out.print("Ingrese el ID del espacio a liberar: ");
-                String idEspacio = scanner.next();
-                liberarEspacio(datosSimulacion.getEspacios(), idEspacio);
-                break;
-            case 3:
-                datosSimulacion.getAdmin().generarReporte();
-                break;
-            default:
-                System.out.println("Opción no válida. Inténtalo de nuevo.");
-                break;
+        List<Estacionamiento> espacios = datosSimulacion.getEspacios();
+        ModuloAdministracion admin = datosSimulacion.getAdmin();
+
+        String placa = registrarMoto();
+        System.out.println("--------- Espacios disponibles por el momento: " + admin.getEspaciosLibres() + " ---------");
+
+        System.out.println("\nTiempo de espera predeterminado: 1 hora aproximadamente.");
+        System.out.println("¿Desea cambiar el tiempo de espera? (1) Sí (2) No");
+        int cambiarTiempo = obtenerEntradaInt();
+
+        if (cambiarTiempo == 1) {
+            solicitarTiempo();
+        } else {
+            System.out.println("Tiempo asignado: 1 hora.");
+        }
+
+        asignarEspacio(espacios, placa, admin);
+        mostrarReporteAplicacionMovil(admin);
+
+        // Preguntar si desea salir de la aplicación
+        System.out.println("\n¿Desea salir de la aplicación?\n1) Sí\n2) No");
+        int salirApp = obtenerEntradaInt();
+        if (salirApp == 1) {
+            // Preguntar si desea salir de la simulación o repetirla
+            System.out.println("\n********************  ¿Desea salir de la simulación? ********************");
+            System.out.println("1) Sí\n2) No\n3) Iniciar otra simulación\n4) Limpiar datos de simulación");
+            int salirSimulacion = obtenerEntradaInt();
+            switch (salirSimulacion) {
+                case 1:
+                    System.out.println("\n##########################################");
+                    System.out.println("******************** Hasta Pronto ********************");
+                    System.out.println("##########################################");
+                    System.exit(0);
+                case 2:
+                    System.out.println("Continuando con la aplicación...");
+                    mostrarMenuOpciones(datosSimulacion);
+                    break;
+                case 3:
+                    System.out.println("Iniciando otra simulación...");
+                    mostrarMenuOpciones(datosSimulacion); // Aquí se mantiene el estado de los espacios
+                    break;
+                case 4:
+                    System.out.println("Limpiando datos de simulación...");
+                    datosSimulacion.limpiarDatos(); // Resetear todos los datos de la simulación
+                    iniciarAplicacion(datosSimulacion);
+                    break;
+                default:
+                    break;
+            }
         }
     }
-    
-
 
     public void asignarEspacio(List<Estacionamiento> espacios, String placa, ModuloAdministracion admin) {
-    for (Estacionamiento espacio : espacios) {
-        if (!espacio.isOcupado()) {
-            espacio.ocuparEspacio();
-            System.out.println("Espacio " + espacio.getIdEspacio() + " ha sido asignado a la moto con placa: " + placa);
-            admin.incrementarEspaciosOcupados();
-            sensor.detectarOcupacion();
-            return;
+        for (Estacionamiento espacio : espacios) {
+            if (!espacio.isOcupado()) {
+                espacio.ocuparEspacio();
+                System.out.println("Espacio " + espacio.getIdEspacio() + " ha sido asignado a la moto con placa: " + placa);
+                admin.incrementarEspaciosOcupados();
+                sensor.detectarOcupacion();
+                return;
+            }
         }
-    }
-    System.out.println("No hay espacios disponibles.");
+        System.out.println("No hay espacios disponibles.");
     }
 
-
+    public void mostrarReporteAplicacionMovil(ModuloAdministracion admin) {
+        System.out.println("\n[REPORTE DE APLICACIÓN MÓVIL] Estado del estacionamiento:");
+        admin.generarReporte();
+    }
 
     private void solicitarTiempo() {
         System.out.print("Por favor, ingresa el tiempo requerido en minutos: ");
