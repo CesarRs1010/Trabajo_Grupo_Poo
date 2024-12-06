@@ -18,14 +18,13 @@ public class SeñalizacionVisual {
         } else {
             System.out.println("[DETALLE] Espacio " + espacio.getIdEspacio()
                     + " está disponible. Luz Verde encendida. Última liberación hace: "
-                    + AplicacionMovil.obtenerTiempoDesdeUltimaLiberacion(espacio) + " minutos.");
+                    + espacio.obtenerTiempoDesdeUltimaLiberacion() + " minutos."); // Llamada corregida
         }
     }
 
     private int obtenerTiempoOcupacion(Estacionamiento espacio) {
         System.out.println("Calculando el tiempo de ocupación para el espacio: " + espacio.getIdEspacio());
-        // Simulación del cálculo del tiempo de ocupación.
-        return 15; // Retorna un valor de ejemplo.
+        return 15; // Retorna un valor de ejemplo
     }
 
     public void mostrarEspaciosDisponibles(List<Estacionamiento> espacios) {
@@ -34,7 +33,6 @@ public class SeñalizacionVisual {
                 .collect(Collectors.toList());
 
         System.out.println("Espacios disponibles:");
-        espaciosLibres
-                .forEach(espacio -> System.out.println("Espacio " + espacio.getIdEspacio() + " está disponible."));
+        espaciosLibres.forEach(espacio -> System.out.println("Espacio " + espacio.getIdEspacio() + " está disponible."));
     }
 }
