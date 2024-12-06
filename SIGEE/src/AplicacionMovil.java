@@ -26,23 +26,29 @@ public class AplicacionMovil {
     }
 
     private void ejecutarOpciones(DatosSimulacion datosSimulacion) {
-        // Código para manejar las opciones seleccionadas por el usuario
-        
-        if (salirApp == 1) {
-            System.out.println("\n********************  ¿Desea salir de la simulación? ********************");
-            System.out.println("1) Sí\n2) No\n3) Iniciar otra simulación\n4) Limpiar datos de simulación");
-            int salirSimulacion = obtenerEntradaInt();
-            switch (salirSimulacion) {
-                case 4:
-                    System.out.println("Limpiando datos de simulación...");
-                    datosSimulacion.limpiarDatos();
-                    iniciarAplicacion(datosSimulacion);
-                    break;
-                default:
-                    break;
-            }
+        System.out.println("\nElija una opción:\n1) Asignar Espacio\n2) Liberar Espacio\n3) Generar Reporte");
+        int opcion = obtenerEntradaInt();
+    
+        switch (opcion) {
+            case 1:
+                System.out.print("Ingrese el número de placa de la moto: ");
+                String placa = scanner.next();
+                asignarEspacio(datosSimulacion.getEspacios(), placa, datosSimulacion.getAdmin());
+                break;
+            case 2:
+                System.out.print("Ingrese el ID del espacio a liberar: ");
+                String idEspacio = scanner.next();
+                liberarEspacio(datosSimulacion.getEspacios(), idEspacio);
+                break;
+            case 3:
+                datosSimulacion.getAdmin().generarReporte();
+                break;
+            default:
+                System.out.println("Opción no válida. Inténtalo de nuevo.");
+                break;
         }
     }
+    
 
 
     public void asignarEspacio(List<Estacionamiento> espacios, String placa, ModuloAdministracion admin) {
