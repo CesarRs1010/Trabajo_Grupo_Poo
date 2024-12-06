@@ -57,7 +57,18 @@ public class AplicacionMovil {
     }
     System.out.println("No hay espacios disponibles.");
     }
-    
+
+
+
+    private void solicitarTiempo() {
+        System.out.print("Por favor, ingresa el tiempo requerido en minutos: ");
+        int tiempo = obtenerEntradaInt();
+        while (tiempo <= 0) {
+            System.out.println("El tiempo debe ser mayor que 0. Inténtalo de nuevo:");
+            tiempo = obtenerEntradaInt();
+        }
+        System.out.println("Tiempo asignado: " + tiempo + " minutos.");
+    }
 
     private int obtenerEntradaInt() {
         while (true) {
