@@ -1,22 +1,7 @@
-public abstract class Estacionamiento {
-    private final String idEspacio;  // Cambiado de protected a private
-    protected boolean ocupado;
-
-    public Estacionamiento(String idEspacio) {
-        this.idEspacio = idEspacio;
-        this.ocupado = false;
-    }
-
-    // Método abstracto que las subclases deben implementar
-    public abstract void ocuparEspacio();
-    public abstract void liberarEspacio();
-
-    public boolean isOcupado() {
-        return ocupado;
-    }
-
-    // Getter para idEspacio
-    public String getIdEspacio() {
-        return idEspacio;
+public class EstacionamientoMai {
+    public static void main(String[] args) {
+        DatosSimulacion datosSimulacion = new DatosSimulacion(10);  // Crear la simulación con 10 espacios
+        AplicacionMovil app = new AplicacionMovil();
+        app.iniciarAplicacion(datosSimulacion);
     }
 }
