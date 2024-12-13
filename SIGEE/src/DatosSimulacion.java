@@ -3,20 +3,20 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//Modificada para cargar los espacios desde la base de datos.
 public class DatosSimulacion {
     private final List<Estacionamiento> espacios = new ArrayList<>();
     private final ModuloAdministracion admin;
-    private final BaseDatos baseDatos = new BaseDatos(); // Cesar: Nueva dependencia
+    private final BaseDatos baseDatos = new BaseDatos();
 
+    // Constructor que inicializa los datos desde la base de datos
     public DatosSimulacion() {
         cargarEspaciosDesdeBD();
         admin = new ModuloAdministracion(espacios.size());
     }
 
-    // Método actualizado para cargar espacios desde la base de datos
+    // Método para cargar espacios desde la base de datos, ordenados numéricamente
     private void cargarEspaciosDesdeBD() {
-        String query = "SELECT * FROM Espacios";
+        String query = "SELECT * FROM Espacios ORDER BY CAST(SUBSTRING(ID, 2) AS UNSIGNED)";
         try (ResultSet rs = baseDatos.obtenerEspacios(query)) {
             while (rs.next()) {
                 String id = rs.getString("ID");
@@ -33,7 +33,7 @@ public class DatosSimulacion {
         }
     }
 
-    // Devuelve la lista de espacios en memoria
+    // Devuelve la lista en memoria de los espacios
     public List<Estacionamiento> getEspacios() {
         return espacios;
     }
@@ -43,7 +43,7 @@ public class DatosSimulacion {
         return admin;
     }
 
-    //Actualiza tanto en memoria como en la base de datos
+    // Actualiza tanto en memoria como en la base de datos
     public void actualizarEstadoEspacio(String idEspacio, boolean ocupado) {
         for (Estacionamiento espacio : espacios) {
             if (espacio.getIdEspacio().equals(idEspacio)) {
@@ -56,5 +56,27 @@ public class DatosSimulacion {
             }
         }
         baseDatos.actualizarEstadoEspacio(idEspacio, ocupado);
+    }
+
+    // Limpia todos los datos en memoria y sincroniza con la base de datos
+    public void limpiarDatos() {
+        // Liberar espacios en memoria y base de datos
+        for (Estacionamiento espacio : espacios) {
+            if (espacio.isOcupado()) {
+                espacio.liberarEspacio();
+                baseDatos.actualizarEstadoEspacio(espacio.getIdEspacio(), false);
+            }
+        }
+
+        // Resetear el módulo de administración
+        admin.resetearEspacios();
+
+        // Limpia la tabla Historial en la base de datos
+        baseDatos.limpiarTabla("Historial");
+
+        // Reinicia el contador AUTO_INCREMENT para la tabla Historial
+        baseDatos.reiniciarAutoIncrement("Historial");
+
+        System.out.println("Datos de la simulación limpiados correctamente.");
     }
 }
