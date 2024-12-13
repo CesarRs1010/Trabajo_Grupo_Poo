@@ -2,8 +2,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DatosSimulacion {
+    private static final Logger LOGGER = Logger.getLogger(DatosSimulacion.class.getName()); // Logger para la clase
+
     private final List<Estacionamiento> espacios = new ArrayList<>();
     private final ModuloAdministracion admin;
     private final BaseDatos baseDatos = new BaseDatos();
@@ -28,8 +32,7 @@ public class DatosSimulacion {
                 espacios.add(espacio);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("Error al cargar espacios desde la base de datos.");
+            LOGGER.log(Level.SEVERE, "Error al cargar espacios desde la base de datos.", e);
         }
     }
 
@@ -60,23 +63,27 @@ public class DatosSimulacion {
 
     // Limpia todos los datos en memoria y sincroniza con la base de datos
     public void limpiarDatos() {
-        // Liberar espacios en memoria y base de datos
-        for (Estacionamiento espacio : espacios) {
-            if (espacio.isOcupado()) {
-                espacio.liberarEspacio();
-                baseDatos.actualizarEstadoEspacio(espacio.getIdEspacio(), false);
+        try {
+            // Liberar espacios en memoria y base de datos
+            for (Estacionamiento espacio : espacios) {
+                if (espacio.isOcupado()) {
+                    espacio.liberarEspacio();
+                    baseDatos.actualizarEstadoEspacio(espacio.getIdEspacio(), false);
+                }
             }
+
+            // Resetear el módulo de administración
+            admin.resetearEspacios();
+
+            // Limpia la tabla Historial en la base de datos
+            baseDatos.limpiarTabla("Historial");
+
+            // Reinicia el contador AUTO_INCREMENT para la tabla Historial
+            baseDatos.reiniciarAutoIncrement("Historial");
+
+            LOGGER.info("Datos de la simulación limpiados correctamente.");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error al limpiar los datos de la simulación.", e);
         }
-
-        // Resetear el módulo de administración
-        admin.resetearEspacios();
-
-        // Limpia la tabla Historial en la base de datos
-        baseDatos.limpiarTabla("Historial");
-
-        // Reinicia el contador AUTO_INCREMENT para la tabla Historial
-        baseDatos.reiniciarAutoIncrement("Historial");
-
-        System.out.println("Datos de la simulación limpiados correctamente.");
     }
 }
