@@ -1,9 +1,12 @@
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BaseDatos {
     private static final String URL = "jdbc:mysql://localhost:3306/estacionamiento";
     private static final String USER = "root";
     private static final String PASSWORD = ""; // Cambia si tienes una contraseña configurada
+    private static final Logger LOGGER = Logger.getLogger(BaseDatos.class.getName()); // Logger para la clase
 
     // Método para conectar a la base de datos
     public Connection conectar() throws SQLException {
@@ -19,7 +22,7 @@ public class BaseDatos {
             pst.setString(2, idEspacio);
             pst.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al actualizar el estado del espacio: " + idEspacio, e);
         }
     }
 
@@ -33,7 +36,7 @@ public class BaseDatos {
             pst.setTimestamp(3, entrada);
             pst.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al registrar la moto con placa: " + placa, e);
         }
     }
 
@@ -44,7 +47,7 @@ public class BaseDatos {
             PreparedStatement pst = con.prepareStatement(query);
             return pst.executeQuery();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al obtener los espacios con la consulta: " + query, e);
             return null;
         }
     }
@@ -64,7 +67,7 @@ public class BaseDatos {
             pst.setString(3, evento);     // Evento (Ocupado, Liberado, etc.)
             pst.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al registrar el historial para el espacio: " + idEspacio, e);
         }
     }
 
@@ -82,7 +85,7 @@ public class BaseDatos {
                 System.out.println("Espacio " + id + ": " + (ocupado ? "Ocupado" : "Libre"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al generar el reporte de espacios.", e);
         }
     }
 
@@ -94,7 +97,7 @@ public class BaseDatos {
             pst.executeUpdate();
             System.out.println("Tabla " + tabla + " limpiada.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al limpiar la tabla: " + tabla, e);
         }
     }
 
@@ -106,7 +109,7 @@ public class BaseDatos {
             pst.executeUpdate();
             System.out.println("AUTO_INCREMENT reiniciado para la tabla: " + tabla);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error al reiniciar AUTO_INCREMENT para la tabla: " + tabla, e);
         }
     }
 }
