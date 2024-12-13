@@ -4,7 +4,7 @@ import java.sql.SQLException;
 public class ModuloAdministracion {
     private final int espaciosTotales;
     private int espaciosOcupados;
-    private final BaseDatos baseDatos = new BaseDatos();
+    private final BaseDatos baseDatos = new BaseDatos(); // Instancia para interactuar con la base de datos
 
     public ModuloAdministracion(int espaciosTotales) {
         this.espaciosTotales = espaciosTotales;
@@ -38,6 +38,32 @@ public class ModuloAdministracion {
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error al generar el reporte de los espacios.");
+        }
+    }
+
+    // Nueva funcionalidad: Genera un reporte de ocupación por porcentaje
+    public void generarReporteOcupacionPorcentaje() {
+        double porcentajeOcupado = ((double) espaciosOcupados / espaciosTotales) * 100;
+        System.out.println("Reporte de ocupación:");
+        System.out.println("Espacios totales: " + espaciosTotales);
+        System.out.println("Espacios ocupados: " + espaciosOcupados);
+        System.out.println("Porcentaje de ocupación: " + String.format("%.2f", porcentajeOcupado) + "%");
+    }
+
+    // Nueva funcionalidad: Genera un reporte basado en un ID de espacio específico
+    public void generarReportePorEspacio(String idEspacio) {
+        String query = "SELECT * FROM Espacios WHERE ID = ?";
+        try (ResultSet espacio = baseDatos.obtenerEspacios(query)) {
+            if (espacio.next()) {
+                String id = espacio.getString("ID");
+                boolean ocupado = espacio.getBoolean("Estado");
+                System.out.println("Reporte del espacio " + id + ": " + (ocupado ? "Ocupado" : "Libre"));
+            } else {
+                System.out.println("El espacio con ID " + idEspacio + " no existe.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error al generar el reporte del espacio específico.");
         }
     }
 
