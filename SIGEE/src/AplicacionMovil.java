@@ -1,9 +1,11 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-//La clase se actualiza para integrar la persistencia de datos con la base de datos.
+//La clase se actualiza para integrar la persistencia de datos con la base de datos y funcionalidades avanzadas.
 public class AplicacionMovil {
     private final Scanner scanner = new Scanner(System.in);
     private final SensorOcupacion sensor = new SensorOcupacion();
@@ -27,15 +29,79 @@ public class AplicacionMovil {
     public void mostrarMenuOpciones(DatosSimulacion datosSimulacion) {
         int opcion;
         do {
-            System.out.println("\nIngresar a la aplicación:\n1) Ingresar\n2) Salir");
+            System.out.println("\nMenú Principal:");
+            System.out.println("1) Registrar entrada de moto");
+            System.out.println("2) Generar reporte del estacionamiento");
+            System.out.println("3) Consultar historial");
+            System.out.println("4) Salir");
             opcion = obtenerEntradaInt();
 
-            if (opcion == 1) {
-                ejecutarOpciones(datosSimulacion);
-            } else if (opcion != 2) {
-                System.out.println("Opción no válida. Intente de nuevo.");
+            switch (opcion) {
+                case 1:
+                    ejecutarOpciones(datosSimulacion);
+                    break;
+                case 2:
+                    mostrarReporteAplicacionMovil(datosSimulacion.getAdmin());
+                    break;
+                case 3:
+                    consultarHistorial();
+                    break;
+                case 4:
+                    System.out.println("Gracias por usar la aplicación. ¡Hasta luego!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Opción no válida. Intente de nuevo.");
             }
-        } while (opcion != 2);
+        } while (opcion != 4);
+    }
+
+    private void consultarHistorial() {
+        System.out.println("\nConsultar historial:");
+        System.out.println("1) Por tipo de evento");
+        System.out.println("2) Por rango de fechas");
+        System.out.println("3) Por espacio");
+        int opcion = obtenerEntradaInt();
+        try {
+            switch (opcion) {
+                case 1:
+                    System.out.print("Ingrese el tipo de evento (Ocupado/Liberado): ");
+                    String evento = scanner.nextLine();
+                    mostrarHistorial(baseDatos.consultarHistorialPorEvento(evento));
+                    break;
+                case 2:
+                    System.out.print("Ingrese fecha de inicio (YYYY-MM-DD HH:MM:SS): ");
+                    Timestamp inicio = Timestamp.valueOf(scanner.nextLine());
+                    System.out.print("Ingrese fecha de fin (YYYY-MM-DD HH:MM:SS): ");
+                    Timestamp fin = Timestamp.valueOf(scanner.nextLine());
+                    mostrarHistorial(baseDatos.consultarHistorialPorFecha(inicio, fin));
+                    break;
+                case 3:
+                    System.out.print("Ingrese el ID del espacio: ");
+                    String idEspacio = scanner.nextLine();
+                    mostrarHistorial(baseDatos.consultarHistorialPorEspacio(idEspacio));
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al consultar historial: " + e.getMessage());
+        }
+    }
+
+    private void mostrarHistorial(ResultSet historial) {
+        try {
+            System.out.println("\n[HISTORIAL]");
+            while (historial != null && historial.next()) {
+                System.out.println("ID: " + historial.getInt("ID") +
+                                   ", Placa: " + historial.getString("Placa") +
+                                   ", Espacio: " + historial.getString("Espacio") +
+                                   ", Evento: " + historial.getString("Evento") +
+                                   ", FechaHora: " + historial.getTimestamp("FechaHora"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void ejecutarOpciones(DatosSimulacion datosSimulacion) {
@@ -57,45 +123,8 @@ public class AplicacionMovil {
 
         asignarEspacio(espacios, placa, admin);
         mostrarReporteAplicacionMovil(admin);
-
-        //Se actualiza el menú para preguntar sobre la salida de la aplicación.
-        System.out.println("\n¿Desea salir de la aplicación?\n1) Sí\n2) No");
-        int salirApp = obtenerEntradaInt();
-        if (salirApp == 1) {
-            mostrarMenuSalir(datosSimulacion);
-        }
     }
 
-    private void mostrarMenuSalir(DatosSimulacion datosSimulacion) {
-        System.out.println("\n******************** ¿Desea salir de la simulación? ********************");
-        System.out.println("1) Sí\n2) No\n3) Iniciar otra simulación\n4) Limpiar datos de simulación");
-        int opcion = obtenerEntradaInt();
-        switch (opcion) {
-            case 1:
-                System.out.println("\n##########################################");
-                System.out.println("******************** Hasta Pronto ********************");
-                System.out.println("##########################################");
-                System.exit(0);
-            case 2:
-                System.out.println("Continuando con la aplicación...");
-                mostrarMenuOpciones(datosSimulacion);
-                break;
-            case 3:
-                System.out.println("Iniciando otra simulación...");
-                mostrarMenuOpciones(datosSimulacion);
-                break;
-            case 4:
-                System.out.println("Limpiando datos de simulación...");
-                datosSimulacion.limpiarDatos();
-                iniciarAplicacion(datosSimulacion);
-                break;
-            default:
-                System.out.println("Opción no válida. Intente nuevamente.");
-                mostrarMenuSalir(datosSimulacion);
-        }
-    }
-
-    //Método para asignar espacio e integrar persistencia de datos.
     public void asignarEspacio(List<Estacionamiento> espacios, String placa, ModuloAdministracion admin) {
         for (Estacionamiento espacio : espacios) {
             if (!espacio.isOcupado()) {
@@ -121,7 +150,6 @@ public class AplicacionMovil {
         admin.generarReporte();
     }
 
-    //Método para registrar un evento en el historial
     public void registrarHistorial(String placa, String idEspacio, String evento) {
         baseDatos.registrarHistorial(placa, idEspacio, evento);
         System.out.println("Historial actualizado: " + evento + " para el espacio " + idEspacio + (placa != null ? " con placa " + placa : ""));
