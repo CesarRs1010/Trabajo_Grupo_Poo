@@ -91,4 +91,47 @@ public class BaseDatos {
             e.printStackTrace();
         }
     }
+
+    // Nueva funcionalidad: Consulta historial por tipo de evento
+    public ResultSet consultarHistorialPorEvento(String evento) {
+        String query = "SELECT * FROM Historial WHERE Evento = ?";
+        try {
+            Connection con = conectar();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, evento);
+            return pst.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Nueva funcionalidad: Consulta historial por rango de fechas
+    public ResultSet consultarHistorialPorFecha(Timestamp inicio, Timestamp fin) {
+        String query = "SELECT * FROM Historial WHERE FechaHora BETWEEN ? AND ?";
+        try {
+            Connection con = conectar();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setTimestamp(1, inicio);
+            pst.setTimestamp(2, fin);
+            return pst.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Nueva funcionalidad: Consulta historial por ID de espacio
+    public ResultSet consultarHistorialPorEspacio(String idEspacio) {
+        String query = "SELECT * FROM Historial WHERE Espacio = ?";
+        try {
+            Connection con = conectar();
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, idEspacio);
+            return pst.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
