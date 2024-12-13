@@ -3,7 +3,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-// Cesar: Modificada para cargar los espacios desde la base de datos.
+//Modificada para cargar los espacios desde la base de datos.
 public class DatosSimulacion {
     private final List<Estacionamiento> espacios = new ArrayList<>();
     private final ModuloAdministracion admin;
@@ -14,7 +14,7 @@ public class DatosSimulacion {
         admin = new ModuloAdministracion(espacios.size());
     }
 
-    // Cesar: Método actualizado para cargar espacios desde la base de datos
+    // Método actualizado para cargar espacios desde la base de datos
     private void cargarEspaciosDesdeBD() {
         String query = "SELECT * FROM Espacios";
         try (ResultSet rs = baseDatos.obtenerEspacios(query)) {
@@ -43,7 +43,7 @@ public class DatosSimulacion {
         return admin;
     }
 
-    // Cesar: Actualiza tanto en memoria como en la base de datos
+    //Actualiza tanto en memoria como en la base de datos
     public void actualizarEstadoEspacio(String idEspacio, boolean ocupado) {
         for (Estacionamiento espacio : espacios) {
             if (espacio.getIdEspacio().equals(idEspacio)) {
