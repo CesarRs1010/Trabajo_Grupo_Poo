@@ -8,14 +8,14 @@ public class DatosSimulacion {
     private final ModuloAdministracion admin;
     private final BaseDatos baseDatos = new BaseDatos();
 
-    // Constructor que inicializa los datos desde la base de datos
     public DatosSimulacion() {
         cargarEspaciosDesdeBD();
         admin = new ModuloAdministracion(espacios.size());
     }
 
-    // Método para cargar espacios desde la base de datos, ordenados numéricamente
+    // Cargar los espacios desde la base de datos a la memoria
     private void cargarEspaciosDesdeBD() {
+        // Consulta actualizada para ordenar los espacios
         String query = "SELECT * FROM Espacios ORDER BY CAST(SUBSTRING(ID, 2) AS UNSIGNED)";
         try (ResultSet rs = baseDatos.obtenerEspacios(query)) {
             while (rs.next()) {

@@ -6,9 +6,8 @@ import java.sql.SQLException;
 public class MotoDAO {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/estacionamiento";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = ""; // Cambiar si tienes una contraseña configurada.
+    private static final String DB_PASSWORD = ""; // Contraseña vacía en XAMPP por defecto
 
-    // Método para guardar una nueva moto en la base de datos.
     public void guardarMoto(Moto moto) {
         String sql = "INSERT INTO Motos (Placa, Espacio, TiempoEntrada) VALUES (?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -27,7 +26,6 @@ public class MotoDAO {
         }
     }
 
-    // Método para actualizar el estado de un espacio relacionado con una moto.
     public void actualizarEstadoEspacio(String idEspacio, boolean ocupado) {
         String sql = "UPDATE Espacios SET Estado = ? WHERE ID = ?";
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -42,15 +40,14 @@ public class MotoDAO {
         }
     }
 
-    // Método para registrar un evento relacionado con las motos en el historial.
     public void registrarHistorial(String placa, String idEspacio, String evento) {
         String sql = "INSERT INTO Historial (Placa, Espacio, Evento) VALUES (?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, placa);
-            pstmt.setString(2, idEspacio);
-            pstmt.setString(3, evento);
+            pstmt.setString(1, placa);       // Puede ser NULL si no hay una placa
+            pstmt.setString(2, idEspacio);  // ID del espacio involucrado
+            pstmt.setString(3, evento);     // Evento (Ocupado, Liberado, etc.)
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
