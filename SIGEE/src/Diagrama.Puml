@@ -1,35 +1,90 @@
-@startuml Diagrama
+@startuml
 
-interface Sensor {
-    +void detectarOcupacion()
-    +void detectarLibreracion()
+' Clases principales
+class AplicacionMovil {
+    - Scanner scanner
+    - SensorOcupacion sensor
+    - BaseDatos baseDatos
+    + void iniciarAplicacion(DatosSimulacion datosSimulacion)
+    + String registrarMoto()
+    + void mostrarMenuOpciones(DatosSimulacion datosSimulacion)
+    + void asignarEspacio(List<Estacionamiento> espacios, String placa, ModuloAdministracion admin)
+    + void liberarEspacio(String idEspacio, DatosSimulacion datosSimulacion)
+}
+
+class BaseDatos {
+    - String URL
+    - String USER
+    - String PASSWORD
+    + Connection conectar()
+    + void actualizarEstadoEspacio(String idEspacio, boolean ocupado)
+    + void registrarMoto(String placa, String idEspacio, Timestamp entrada)
+    + ResultSet obtenerEspacios(String query)
+    + void registrarHistorial(String placa, String idEspacio, String evento)
+    + void limpiarTabla(String tabla)
+    + void reiniciarAutoIncrement(String tabla)
+}
+
+class DatosSimulacion {
+    - List<Estacionamiento> espacios
+    - ModuloAdministracion admin
+    - BaseDatos baseDatos
+    + List<Estacionamiento> getEspacios()
+    + ModuloAdministracion getAdmin()
+    + void limpiarDatos()
 }
 
 abstract class Estacionamiento {
     - String idEspacio
     - boolean ocupado
-    + Estacionamiento(String idEspacio)
-    + abstract void ocuparEspacio()
-    + abstract void liberarEspacio()
     + boolean isOcupado()
     + String getIdEspacio()
+    + int obtenerTiempoDesdeUltimaLiberacion()
 }
 
-class EspacioMoto extends Estacionamiento {
-    + EspacioMoto(String idEspacio)
+class EspacioMoto {
     + void ocuparEspacio()
     + void liberarEspacio()
 }
 
-class SensorOcupacion implements Sensor {
+class EstacionamientoMai {
+    + static void main(String[] args)
+}
+
+class ModuloAdministracion {
+    - int espaciosTotales
+    - int espaciosOcupados
+    - BaseDatos baseDatos
+    + void incrementarEspaciosOcupados()
+    + void decrementarEspaciosOcupados()
+    + void generarReporte()
+    + int getEspaciosLibres()
+    + void resetearEspacios()
+}
+
+class Moto {
+    - String placa
+    - String espacio
+    - Timestamp tiempoEntrada
+    + String getPlaca()
+    + String getEspacio()
+    + Timestamp getTiempoEntrada()
+}
+
+class MotoDAO {
+    + void guardarMoto(Moto moto)
+    + void actualizarEstadoEspacio(String idEspacio, boolean ocupado)
+    + void registrarHistorial(String placa, String idEspacio, String evento)
+}
+
+class SensorOcupacion {
     + void detectarOcupacion()
     + void detectarLibreracion()
 }
 
-class AplicacionMovil {
-    + void asignarEspacio(Estacionamiento espacio)
-    + static int obtenerTiempoDesdeUltimaLiberacion(Estacionamiento espacio)
-    + void mostrarReporteAplicacionMovil(Estacionamiento espacio, ModuloAdministracion admin)
+interface Sensor {
+    + void detectarOcupacion()
+    + void detectarLibreracion()
 }
 
 class SeñalizacionVisual {
@@ -38,29 +93,18 @@ class SeñalizacionVisual {
     + void mostrarEspaciosDisponibles(List<Estacionamiento> espacios)
 }
 
-class ModuloAdministracion {
-    - int espaciosTotales
-    - int espaciosOcupados
-    + ModuloAdministracion(int espaciosTotales)
-    + void incrementarEspaciosOcupados()
-    + void decrementarEspaciosOcupados()
-    + void generarReporte()
-}
-
-class EstacionamientoMain {
-    + void main(String[] args) throws Exception
-}
-
-Estacionamiento <|-- EspacioMoto
-Sensor <|.. SensorOcupacion
-EstacionamientoMain ..> AplicacionMovil : "crea y usa"
-EstacionamientoMain ..> EspacioMoto : "crea y usa"
-EstacionamientoMain ..> SensorOcupacion : "crea y usa"
-EstacionamientoMain ..> SeñalizacionVisual : "crea y usa"
-EstacionamientoMain ..> ModuloAdministracion : "crea y usa"
-AplicacionMovil ..> Estacionamiento : "usa"
-AplicacionMovil ..> ModuloAdministracion : "usa"
-SeñalizacionVisual ..> Estacionamiento : "usa"
-SeñalizacionVisual ..> List : "usa"
+' Relaciones
+AplicacionMovil --> DatosSimulacion : "usa"
+AplicacionMovil --> BaseDatos : "usa"
+AplicacionMovil --> SensorOcupacion : "usa"
+DatosSimulacion --> ModuloAdministracion : "compone"
+DatosSimulacion --> BaseDatos : "usa"
+DatosSimulacion --> Estacionamiento : "contiene *"
+EspacioMoto --|> Estacionamiento : "hereda"
+ModuloAdministracion --> BaseDatos : "usa"
+ModuloAdministracion --> Estacionamiento : "genera reportes"
+MotoDAO --> Moto : "guarda"
+SensorOcupacion --|> Sensor : "implementa"
+SeñalizacionVisual --> Estacionamiento : "usa"
 
 @enduml
